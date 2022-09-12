@@ -12,8 +12,8 @@ client.on('connect', () => console.log('::> Redis Client Connected'));
 client.on('error', (err) => console.log('<:: Redis Client Error', err));
 
 
-app.get('/credentials', (req, res) => {
-    const key = req.query.key.toString();
+app.get('/credentials/:key', (req, res) => {
+    const key = req.params.key.toString()
     client.get(key).then(r => res.send(`The value for the ${key} credential is ${r}`) );
 });
 
