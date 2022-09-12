@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const { createClient } = require('redis')
 
+app.use(express.json())
+
 const client = createClient();
 
 (async () => {
@@ -14,15 +16,16 @@ client.on('error', (err) => console.log('<:: Redis Client Error', err));
 
 app.get('/credentials/:key', (req, res) => {
     const key = req.params.key.toString()
-    client.get(key).then(r => res.send(`The value for the ${key} credential is ${r}`) );
+    client.get(key).then(r =>
+        res.send(JSON.parse(r)));
 });
 
 app.post('/credentials/:key', (req, res) => {
     const key = req.params.key.toString();
-    const value = req.query.value.toString();
+    const sessionValue = req.body;
 
-    client.set(key, value).then(
-        r => res.send(`Credential successfully added with ${key}: ${value}`))
+    client.set(key, JSON.stringify(sessionValue)).then(
+        r => res.send(sessionValue));
 });
 
 //PORT
