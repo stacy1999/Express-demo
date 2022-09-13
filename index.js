@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const { createClient } = require('redis')
 
-app.use(express.json())
+app.use(express.json(), cors())
 
 const client = createClient();
 
@@ -29,5 +30,5 @@ app.post('/credentials/:key', (req, res) => {
 });
 
 //PORT
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port} ...`))
